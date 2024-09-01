@@ -3,31 +3,31 @@ using System.Collections.Generic;
 
 namespace Project1
 {
-    public class Order
+    public class DeliveryOrder : Order
     {
-        public string CustomerName { get; set; }
-        public List<FoodItem> Items { get; set; } = new List<FoodItem>();
+        public string Address { get; set; }
+        private const int DeliveryCharge = 2000; // in pence
+        private const int FreeDeliveryThreshold = 20000; // in pence
 
-        public virtual void OutputOrder()
+        public override void OutputOrder()
         {
-            Console.WriteLine($"Order for {CustomerName}:");
-            foreach (var item in Items)
+            if (string.IsNullOrWhiteSpace(Address))
             {
-                item.PrintDetails();
+                throw new Exception("Delivery address cannot be empty.");
             }
 
+            base.OutputOrder();
             int total = CalculateTotal();
-            Console.WriteLine($"Total: {total / 100.0:C}");
-        }
-
-        public int CalculateTotal()
-        {
-            int total = 0;
-            foreach (var item in Items)
+            if (total < FreeDeliveryThreshold)
             {
-                total += item.Price;
+                total += DeliveryCharge;
+                Console.WriteLine($"Delivery charge: {DeliveryCharge / 100.0:C}");
             }
-            return total;
+            else
+            {
+                Console.WriteLine("Free delivery!");
+            }
+            Console.WriteLine($"Final Total: {total / 100.0:C}");
         }
     }
 }
