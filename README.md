@@ -3,35 +3,35 @@ using System.Collections.Generic;
 
 namespace Project1
 {
-    public class Pizza : FoodItem
+    public class Burger : FoodItem
     {
-        public List<Topping> Toppings { get; set; } = new List<Topping>();
+        public List<Garnish> Garnishes { get; set; } = new List<Garnish>();
 
-        public Pizza(string name, List<Topping> toppings, int price)
+        public Burger(string name, List<Garnish> garnishes, int price)
         {
             Name = name;
-            Toppings = toppings;
+            Garnishes = garnishes;
             Price = price;
         }
 
-        public void RemoveTopping(string toppingName)
+        public void RemoveGarnish(string garnishName)
         {
-            Toppings.RemoveAll(t => t.Name.Equals(toppingName, StringComparison.OrdinalIgnoreCase));
+            Garnishes.RemoveAll(g => g.Name.Equals(garnishName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void AddTopping(Topping topping)
+        public void AddGarnish(Garnish garnish)
         {
-            Toppings.Add(topping);
-            Price += topping.Price;  // Add the price of the new topping to the pizza price
+            Garnishes.Add(garnish);
+            Price += garnish.Price;  // Add the price of the new garnish to the burger price
         }
 
         public override void PrintDetails()
         {
-            Console.WriteLine($"Pizza: {Name}, Price: {Price}");
-            Console.Write("Toppings: ");
-            foreach (var topping in Toppings)
+            Console.WriteLine($"Burger: {Name}, Price: {Price}");
+            Console.Write("Garnishes: ");
+            foreach (var garnish in Garnishes)
             {
-                Console.Write($"{topping.Name} ");
+                Console.Write($"{garnish.Name} ");
             }
             Console.WriteLine();
         }
