@@ -3,37 +3,31 @@ using System.Collections.Generic;
 
 namespace Project1
 {
-    public class Burger : FoodItem
+    public class Order
     {
-        public List<Garnish> Garnishes { get; set; } = new List<Garnish>();
+        public string CustomerName { get; set; }
+        public List<FoodItem> Items { get; set; } = new List<FoodItem>();
 
-        public Burger(string name, List<Garnish> garnishes, int price)
+        public virtual void OutputOrder()
         {
-            Name = name;
-            Garnishes = garnishes;
-            Price = price;
-        }
-
-        public void RemoveGarnish(string garnishName)
-        {
-            Garnishes.RemoveAll(g => g.Name.Equals(garnishName, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void AddGarnish(Garnish garnish)
-        {
-            Garnishes.Add(garnish);
-            Price += garnish.Price;  // Add the price of the new garnish to the burger price
-        }
-
-        public override void PrintDetails()
-        {
-            Console.WriteLine($"Burger: {Name}, Price: {Price}");
-            Console.Write("Garnishes: ");
-            foreach (var garnish in Garnishes)
+            Console.WriteLine($"Order for {CustomerName}:");
+            foreach (var item in Items)
             {
-                Console.Write($"{garnish.Name} ");
+                item.PrintDetails();
             }
-            Console.WriteLine();
+
+            int total = CalculateTotal();
+            Console.WriteLine($"Total: {total / 100.0:C}");
+        }
+
+        public int CalculateTotal()
+        {
+            int total = 0;
+            foreach (var item in Items)
+            {
+                total += item.Price;
+            }
+            return total;
         }
     }
 }
