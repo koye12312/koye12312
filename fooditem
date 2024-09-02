@@ -1,1 +1,15 @@
 //fooditem
+using System;
+using System.Collections.Generic;
+
+namespace JustNom
+{
+    public abstract class FoodItem
+    {
+        public string Name { get; set; }
+        public int BasePrice { get; set; } // Base price in pence
+
+        public abstract void PrintDetails();
+        public abstract int CalculatePrice();
+    }
+}
