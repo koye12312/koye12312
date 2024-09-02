@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace JustNom
 {
@@ -25,6 +26,22 @@ namespace JustNom
         public int CalculateTotal()
         {
             return Items.Sum(item => item.CalculatePrice());
+        }
+
+        // Convert order details to a string for saving
+        public virtual string ToOrderString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Customer: {CustomerName}");
+            sb.AppendLine("Items:");
+
+            foreach (var item in Items)
+            {
+                sb.AppendLine($"  - {item.Name} ({item.CalculatePrice() / 100.0:C})");
+            }
+
+            sb.AppendLine($"Total: {CalculateTotal() / 100.0:C}");
+            return sb.ToString();
         }
     }
 }
