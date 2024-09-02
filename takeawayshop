@@ -16,9 +16,49 @@ namespace JustNom
 
         // Method to load the menu from a file
         public static void LoadMenu(string menuFilePath)
+{
+    if (!File.Exists(menuFilePath))
+    {
+        throw new FileNotFoundException("Menu file not found.", menuFilePath);
+    }
+
+    var lines = File.ReadAllLines(menuFilePath);
+    foreach (var line in lines)
+    {
+        if (line.StartsWith("Name:"))
         {
-            // Code for loading the menu remains unchanged...
+            ShopName = line.Split(':')[1].Trim();
+            Console.WriteLine($"Shop Name: {ShopName}");  // Debugging output
         }
+        else if (line.StartsWith("Toppings:"))
+        {
+            ParseToppings(line);
+            Console.WriteLine("Toppings loaded.");  // Debugging output
+        }
+        else if (line.StartsWith("Garnishes:"))
+        {
+            ParseGarnishes(line);
+            Console.WriteLine("Garnishes loaded.");  // Debugging output
+        }
+        else if (line.StartsWith("Pizza:"))
+        {
+            ParsePizza(line);
+            Console.WriteLine("Pizza loaded.");  // Debugging output
+        }
+        else if (line.StartsWith("Burger:"))
+        {
+            ParseBurger(line);
+            Console.WriteLine("Burger loaded.");  // Debugging output
+        }
+    }
+
+    // After loading, list all menu items to verify
+    Console.WriteLine("Menu items loaded:");
+    foreach (var item in Menu)
+    {
+        Console.WriteLine($"- {item.Name}");
+    }
+}
 
         // Method to save all orders to a file
         public static void SaveOrders(string filePath)
