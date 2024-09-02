@@ -1,1 +1,11 @@
 //topping 
+using System;
+
+namespace JustNom
+{
+    public class Topping
+    {
+        public string Name { get; set; }
+        public int Price { get; set; } // Price in pence
+    }
+}
