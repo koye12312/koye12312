@@ -1,1 +1,11 @@
 //garnish
+using System;
+
+namespace JustNom
+{
+    public class Garnish
+    {
+        public string Name { get; set; }
+        public int Price { get; set; } // Price in pence
+    }
+}
