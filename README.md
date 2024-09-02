@@ -1,33 +1,7 @@
-using System;
-using System.Collections.Generic;
-
-namespace Project1
-{
-    public class DeliveryOrder : Order
-    {
-        public string Address { get; set; }
-        private const int DeliveryCharge = 2000; // in pence
-        private const int FreeDeliveryThreshold = 20000; // in pence
-
-        public override void OutputOrder()
-        {
-            if (string.IsNullOrWhiteSpace(Address))
-            {
-                throw new Exception("Delivery address cannot be empty.");
-            }
-
-            base.OutputOrder();
-            int total = CalculateTotal();
-            if (total < FreeDeliveryThreshold)
-            {
-                total += DeliveryCharge;
-                Console.WriteLine($"Delivery charge: {DeliveryCharge / 100.0:C}");
-            }
-            else
-            {
-                Console.WriteLine("Free delivery!");
-            }
-            Console.WriteLine($"Final Total: {total / 100.0:C}");
-        }
-    }
-}
+Name:Fast Food Emporium
+Toppings:[<cheese,80>,<pepperoni,120>,<tomato sauce,40>,<ham,150>,<mushroom,80>]
+Garnishes:[<cheese,100>,<fried onions, 80>,<bacon,150>]
+Pizza:<Name:Margherita,Toppings:[tomato sauce, cheese],Price:500>
+Pizza:<Name:Ham and Mushroom,Toppings:[tomato sauce, ham, mushroom, cheese],Price:650>
+Burger:<Name:Plain Burger,Garnishes:[],Price:350>
+Burger:<Name:Cheese Burger,Garnishes:[cheese],Price:450>
