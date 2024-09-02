@@ -1,1 +1,30 @@
 //order
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace JustNom
+{
+    public class Order
+    {
+        public string CustomerName { get; set; }
+        public List<FoodItem> Items { get; set; } = new List<FoodItem>();
+
+        public void OutputOrder()
+        {
+            Console.WriteLine($"Order for {CustomerName}:");
+            foreach (var item in Items)
+            {
+                item.PrintDetails();
+            }
+
+            int total = CalculateTotal();
+            Console.WriteLine($"Total: {total / 100.0:C}");
+        }
+
+        public int CalculateTotal()
+        {
+            return Items.Sum(item => item.CalculatePrice());
+        }
+    }
+}
