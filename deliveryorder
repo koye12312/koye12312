@@ -1,1 +1,29 @@
 //deliveryorder
+using System;
+
+namespace JustNom
+{
+    public class DeliveryOrder : Order
+    {
+        public string Address { get; set; }
+        private const int DeliveryCharge = 200; // 200 pence = £2.00
+        private const int FreeDeliveryThreshold = 2000; // 2000 pence = £20.00
+
+        public new void OutputOrder()
+        {
+            base.OutputOrder();
+
+            int total = CalculateTotal();
+            if (total < FreeDeliveryThreshold)
+            {
+                total += DeliveryCharge;
+                Console.WriteLine($"Delivery charge: {DeliveryCharge / 100.0:C}");
+            }
+            else
+            {
+                Console.WriteLine("Free delivery!");
+            }
+            Console.WriteLine($"Final Total: {total / 100.0:C}");
+        }
+    }
+}
