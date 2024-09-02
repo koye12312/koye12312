@@ -1,2 +1,41 @@
 //pizza
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace JustNom
+{
+    public class Pizza : FoodItem
+    {
+        public List<Topping> Toppings { get; private set; }
+
+        public Pizza(string name, List<Topping> toppings, int basePrice)
+        {
+            Name = name;
+            Toppings = toppings ?? new List<Topping>();
+            BasePrice = basePrice;
+        }
+
+        public void RemoveToppings(List<string> toppingNames)
+        {
+            Toppings = Toppings.Where(t => !toppingNames.Contains(t.Name)).ToList();
+        }
+
+        public void AddToppings(List<Topping> additionalToppings)
+        {
+            Toppings.AddRange(additionalToppings);
+        }
+
+        public override void PrintDetails()
+        {
+            Console.WriteLine($"Pizza: {Name}, Price: {BasePrice / 100.0:C}");
+            Console.WriteLine("Toppings: " + string.Join(", ", Toppings.Select(t => t.Name)));
+        }
+
+        public override int CalculatePrice()
+        {
+            return BasePrice + Toppings.Sum(t => t.Price);
+        }
+    }
+}
