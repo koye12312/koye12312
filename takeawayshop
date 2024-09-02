@@ -1,1 +1,107 @@
 //rakeawayshop
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace JustNom
+{
+    public static class TakeawayShop
+    {
+        public static string ShopName { get; private set; }
+        public static List<FoodItem> Menu { get; private set; } = new List<FoodItem>();
+        public static List<Topping> AvailableToppings { get; private set; } = new List<Topping>();
+        public static List<Garnish> AvailableGarnishes { get; private set; } = new List<Garnish>();
+
+        // Method to load the menu from a file
+        public static void LoadMenu(string menuFilePath)
+        {
+            if (!File.Exists(menuFilePath))
+            {
+                throw new FileNotFoundException("Menu file not found.", menuFilePath);
+            }
+
+            var lines = File.ReadAllLines(menuFilePath);
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("Name:"))
+                {
+                    ShopName = line.Split(':')[1].Trim();
+                }
+                else if (line.StartsWith("Toppings:"))
+                {
+                    ParseToppings(line);
+                }
+                else if (line.StartsWith("Garnishes:"))
+                {
+                    ParseGarnishes(line);
+                }
+                else if (line.StartsWith("Pizza:"))
+                {
+                    ParsePizza(line);
+                }
+                else if (line.StartsWith("Burger:"))
+                {
+                    ParseBurger(line);
+                }
+            }
+        }
+
+        // Helper method to parse toppings from the menu file
+        private static void ParseToppings(string line)
+        {
+            var toppingMatches = Regex.Matches(line, @"<([^,]+),(\d+)>");
+
+            foreach (Match match in toppingMatches)
+            {
+                string name = match.Groups[1].Value.Trim();
+                int price = int.Parse(match.Groups[2].Value.Trim());
+                AvailableToppings.Add(new Topping { Name = name, Price = price });
+            }
+        }
+
+        // Helper method to parse garnishes from the menu file
+        private static void ParseGarnishes(string line)
+        {
+            var garnishMatches = Regex.Matches(line, @"<([^,]+),(\d+)>");
+
+            foreach (Match match in garnishMatches)
+            {
+                string name = match.Groups[1].Value.Trim();
+                int price = int.Parse(match.Groups[2].Value.Trim());
+                AvailableGarnishes.Add(new Garnish { Name = name, Price = price });
+            }
+        }
+
+        // Helper method to parse pizzas from the menu file
+        private static void ParsePizza(string line)
+        {
+            var match = Regex.Match(line, @"<Name:([^,]+),Toppings:\[([^\]]*)\],Price:(\d+)>");
+            if (match.Success)
+            {
+                string name = match.Groups[1].Value.Trim();
+                var toppings = match.Groups[2].Value.Split(',').Select(t => t.Trim()).ToList();
+                int price = int.Parse(match.Groups[3].Value.Trim());
+
+                var pizzaToppings = AvailableToppings.Where(t => toppings.Contains(t.Name)).ToList();
+                Menu.Add(new Pizza(name, pizzaToppings, price));
+            }
+        }
+
+        // Helper method to parse burgers from the menu file
+        private static void ParseBurger(string line)
+        {
+            var match = Regex.Match(line, @"<Name:([^,]+),Garnishes:\[([^\]]*)\],Price:(\d+)>");
+            if (match.Success)
+            {
+                string name = match.Groups[1].Value.Trim();
+                var garnishes = match.Groups[2].Value.Split(',').Select(g => g.Trim()).ToList();
+                int price = int.Parse(match.Groups[3].Value.Trim());
+
+                var burgerGarnishes = AvailableGarnishes.Where(g => garnishes.Contains(g.Name)).ToList();
+                Menu.Add(new Burger(name, burgerGarnishes, price));
+            }
+        }
+    }
+}
