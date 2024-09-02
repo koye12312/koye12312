@@ -1,1 +1,40 @@
 //burger
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace JustNom
+{
+    public class Burger : FoodItem
+    {
+        public List<Garnish> Garnishes { get; private set; }
+
+        public Burger(string name, List<Garnish> garnishes, int basePrice)
+        {
+            Name = name;
+            Garnishes = garnishes ?? new List<Garnish>();
+            BasePrice = basePrice;
+        }
+
+        public void RemoveGarnishes(List<string> garnishNames)
+        {
+            Garnishes = Garnishes.Where(g => !garnishNames.Contains(g.Name)).ToList();
+        }
+
+        public void AddGarnishes(List<Garnish> additionalGarnishes)
+        {
+            Garnishes.AddRange(additionalGarnishes);
+        }
+
+        public override void PrintDetails()
+        {
+            Console.WriteLine($"Burger: {Name}, Price: {BasePrice / 100.0:C}");
+            Console.WriteLine("Garnishes: " + string.Join(", ", Garnishes.Select(g => g.Name)));
+        }
+
+        public override int CalculatePrice()
+        {
+            return BasePrice + Garnishes.Sum(g => g.Price);
+        }
+    }
+}
