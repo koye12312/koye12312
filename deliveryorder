@@ -1,5 +1,5 @@
 //deliveryorder
-using System;
+using System.Text;
 
 namespace JustNom
 {
@@ -9,7 +9,7 @@ namespace JustNom
         private const int DeliveryCharge = 200; // 200 pence = £2.00
         private const int FreeDeliveryThreshold = 2000; // 2000 pence = £20.00
 
-        public new void OutputOrder()
+        public override void OutputOrder()
         {
             base.OutputOrder();
 
@@ -24,6 +24,23 @@ namespace JustNom
                 Console.WriteLine("Free delivery!");
             }
             Console.WriteLine($"Final Total: {total / 100.0:C}");
+        }
+
+        public override string ToOrderString()
+        {
+            var sb = new StringBuilder(base.ToOrderString());
+            sb.AppendLine($"Delivery Address: {Address}");
+
+            int total = CalculateTotal();
+            if (total < FreeDeliveryThreshold)
+            {
+                total += DeliveryCharge;
+                sb.AppendLine($"Delivery Charge: {DeliveryCharge / 100.0:C}");
+            }
+            sb.AppendLine($"Final Total: {total / 100.0:C}");
+            sb.AppendLine();
+
+            return sb.ToString();
         }
     }
 }
